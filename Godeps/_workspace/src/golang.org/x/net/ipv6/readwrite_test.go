@@ -12,8 +12,8 @@ import (
 	"testing"
 
 	"github.com/socketplane/socketplane/Godeps/_workspace/src/golang.org/x/net/internal/iana"
-	"golang.org/x/net/internal/nettest"
 	"github.com/socketplane/socketplane/Godeps/_workspace/src/golang.org/x/net/ipv6"
+	"golang.org/x/net/internal/nettest"
 )
 
 func benchmarkUDPListener() (net.PacketConn, net.Addr, error) {

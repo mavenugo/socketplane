@@ -6,7 +6,7 @@ import (
 	"os/signal"
 	"time"
 
-	"github.com/socketplane/socketplane/Godeps/_workspace/src/github.com/socketplane/ecc"
+	"github.com/socketplane/ecc"
 )
 
 const dataDir = "/tmp/ecc"

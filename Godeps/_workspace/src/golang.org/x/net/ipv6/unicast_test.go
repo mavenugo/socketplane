@@ -13,9 +13,9 @@ import (
 	"time"
 
 	"github.com/socketplane/socketplane/Godeps/_workspace/src/golang.org/x/net/internal/iana"
-	"golang.org/x/net/internal/icmp"
-	"golang.org/x/net/internal/nettest"
 	"github.com/socketplane/socketplane/Godeps/_workspace/src/golang.org/x/net/ipv6"
+	"golang.org/x/net/icmp"
+	"golang.org/x/net/internal/nettest"
 )
 
 func TestPacketConnReadWriteUnicastUDP(t *testing.T) {
@@ -119,7 +119,7 @@ func TestPacketConnReadWriteUnicastICMP(t *testing.T) {
 
 	var f ipv6.ICMPFilter
 	f.SetAll(true)
-	f.Set(ipv6.ICMPTypeEchoReply, false)
+	f.Accept(ipv6.ICMPTypeEchoReply)
 	if err := p.SetICMPFilter(&f); err != nil {
 		t.Fatal(err)
 	}

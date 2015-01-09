@@ -5,7 +5,9 @@ import (
 	"fmt"
 	"net"
 	"net/http"
-	//	log "github.com/socketplane/socketplane/Godeps/_workspace/src/github.com/Sirupsen/logrus"
+	"net/url"
+
+	log "github.com/socketplane/socketplane/Godeps/_workspace/src/github.com/Sirupsen/logrus"
 	"github.com/socketplane/socketplane/Godeps/_workspace/src/github.com/gorilla/mux"
 )
 
@@ -71,9 +73,12 @@ func createRouter(d *Daemon) *mux.Router {
 			"/networks/{id:.*}":    getNetwork,
 		},
 		"POST": {
-			"/configuration": setConfiguration,
-			"/connections":   createConnection,
-			"/networks":      createNetwork,
+			"/configuration":  setConfiguration,
+			"/connections":    createConnection,
+			"/networks":       createNetwork,
+			"/cluster/listen": clusterListen,
+			"/cluster/join":   clusterJoin,
+			"/cluster/leave":  clusterLeave,
 		},
 		"DELETE": {
 			"/connections/{id:.*}": deleteConnection,
@@ -250,5 +255,50 @@ func deleteNetwork(d *Daemon, w http.ResponseWriter, r *http.Request) *apiError 
 	if err != nil {
 		return &apiError{http.StatusInternalServerError, err.Error()}
 	}
+	return nil
+}
+
+func clusterListen(d *Daemon, w http.ResponseWriter, r *http.Request) *apiError {
+	if r.URL.RawQuery == "" {
+		return &apiError{http.StatusBadRequest, "Please provide the interface parameter"}
+	}
+	values, err := url.ParseQuery(r.URL.RawQuery)
+	if err != nil {
+		return &apiError{http.StatusBadRequest, "Could not decode query parameters"}
+	}
+	iface, ok := values["iface"]
+	if !ok || iface[0] == "" {
+		return &apiError{http.StatusBadRequest, "Please provide the interface parameter"}
+	}
+	log.Debugf("Request Received. Change Cluster Interface to %s", iface[0])
+	err = d.ConfigureClusterListenerPort(iface[0])
+	if err != nil {
+		return &apiError{http.StatusInternalServerError, err.Error()}
+	}
+	return nil
+}
+
+func clusterJoin(d *Daemon, w http.ResponseWriter, r *http.Request) *apiError {
+	if r.URL.RawQuery == "" {
+		return &apiError{http.StatusBadRequest, "Please provide the address parameter"}
+	}
+	values, err := url.ParseQuery(r.URL.RawQuery)
+	if err != nil {
+		return &apiError{http.StatusBadRequest, "Could not decode query parameters"}
+	}
+	addr, ok := values["address"]
+	if !ok || addr[0] == "" {
+		return &apiError{http.StatusBadRequest, "Please provide the address parameter"}
+	}
+	log.Debugf("Request Received. Join Cluster  %s", addr[0])
+	err = d.JoinCluster(addr[0])
+	if err != nil {
+		return &apiError{http.StatusInternalServerError, err.Error()}
+	}
+	return nil
+}
+
+func clusterLeave(d *Daemon, w http.ResponseWriter, r *http.Request) *apiError {
+	//ToDo: Needs implementing
 	return nil
 }

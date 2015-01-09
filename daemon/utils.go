@@ -147,7 +147,7 @@ func ChangeInterfaceName(old, newName string) error {
 }
 
 func CreateVethPair(name1, name2 string) error {
-	return netlink.NetworkCreateVethPair(name1, name2)
+	return netlink.NetworkCreateVethPair(name1, name2, 0)
 }
 
 func SetInterfaceInNamespacePid(name string, nsPid int) error {
@@ -208,4 +208,7 @@ func SetMtu(name string, mtu int) error {
 		return err
 	}
 	return netlink.NetworkSetMTU(iface, mtu)
+}
+
+func GetIfaceForRoute(address string) {
 }

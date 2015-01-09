@@ -4,9 +4,9 @@ import (
 	"os"
 	"os/signal"
 
-	"github.com/socketplane/socketplane/Godeps/_workspace/src/github.com/hashicorp/consul/command"
-	"github.com/socketplane/socketplane/Godeps/_workspace/src/github.com/hashicorp/consul/command/agent"
-	"github.com/socketplane/socketplane/Godeps/_workspace/src/github.com/mitchellh/cli"
+	"github.com/socketplane/ecc/Godeps/_workspace/src/github.com/hashicorp/consul/command"
+	"github.com/socketplane/ecc/Godeps/_workspace/src/github.com/hashicorp/consul/command/agent"
+	"github.com/socketplane/ecc/Godeps/_workspace/src/github.com/mitchellh/cli"
 )
 
 // Commands supported by Embedded Consul Client

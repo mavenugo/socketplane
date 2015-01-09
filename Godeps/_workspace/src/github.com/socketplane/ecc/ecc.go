@@ -15,10 +15,10 @@ import (
 	"reflect"
 	"time"
 
-	"github.com/socketplane/socketplane/Godeps/_workspace/src/github.com/armon/consul-api"
-	"github.com/socketplane/socketplane/Godeps/_workspace/src/github.com/hashicorp/consul/command"
-	"github.com/socketplane/socketplane/Godeps/_workspace/src/github.com/hashicorp/consul/watch"
-	"github.com/socketplane/socketplane/Godeps/_workspace/src/github.com/mitchellh/cli"
+	"github.com/socketplane/ecc/Godeps/_workspace/src/github.com/armon/consul-api"
+	"github.com/socketplane/ecc/Godeps/_workspace/src/github.com/hashicorp/consul/command"
+	"github.com/socketplane/ecc/Godeps/_workspace/src/github.com/hashicorp/consul/watch"
+	"github.com/socketplane/ecc/Godeps/_workspace/src/github.com/mitchellh/cli"
 )
 
 // Embedded Consul Client
@@ -76,6 +76,8 @@ func startConsul(serverMode bool, bootstrap bool, bindAddress string, dataDir st
 
 	if bindAddress != "" {
 		args = append(args, "-bind")
+		args = append(args, bindAddress)
+		args = append(args, "-advertise")
 		args = append(args, bindAddress)
 	}
 

@@ -1,6 +1,6 @@
 {
 	"ImportPath": "github.com/socketplane/socketplane",
-	"GoVersion": "go1.2.1",
+	"GoVersion": "go1.3.2",
 	"Packages": [
 		"./..."
 	],
@@ -46,8 +46,8 @@
 		},
 		{
 			"ImportPath": "github.com/docker/libcontainer/netlink",
-			"Comment": "v0.1.1",
-			"Rev": "4b0a84485d315a53a792687b2f49dba3e6e3d9c6"
+			"Comment": "v1.4.0-72-g1d3b258",
+			"Rev": "1d3b2589d734dc94a1719a3af40b87ed8319f329"
 		},
 		{
 			"ImportPath": "github.com/gorilla/context",
@@ -155,8 +155,8 @@
 		},
 		{
 			"ImportPath": "github.com/socketplane/ecc",
-			"Comment": "v0.1.1-7-g2e6ea1c",
-			"Rev": "2e6ea1ce460d7eaf54b3645c29a9934c5c8788b1"
+			"Comment": "v0.1.1-10-gb5a0545",
+			"Rev": "b5a0545a545f94b891fd65a3df555c7b193d1db2"
 		},
 		{
 			"ImportPath": "github.com/socketplane/go-fastping",
@@ -168,19 +168,20 @@
 			"Rev": "555a561202ec17fe6c068038a35291ce9ba33066"
 		},
 		{
+			"ImportPath": "github.com/vishvananda/netlink",
+			"Rev": "80a80badbda02c350deb690b00fe024555d2d088"
+		},
+		{
 			"ImportPath": "golang.org/x/net/internal/iana",
-			"Comment": "null-223",
-			"Rev": "5dedbdc181629d2f3557caf2667e60eb82c5e6d7"
+			"Rev": "67f25490433376b5f7da086c0b9283fcdeca3a7b"
 		},
 		{
 			"ImportPath": "golang.org/x/net/ipv4",
-			"Comment": "null-223",
-			"Rev": "5dedbdc181629d2f3557caf2667e60eb82c5e6d7"
+			"Rev": "67f25490433376b5f7da086c0b9283fcdeca3a7b"
 		},
 		{
 			"ImportPath": "golang.org/x/net/ipv6",
-			"Comment": "null-223",
-			"Rev": "5dedbdc181629d2f3557caf2667e60eb82c5e6d7"
+			"Rev": "67f25490433376b5f7da086c0b9283fcdeca3a7b"
 		}
 	]
 }

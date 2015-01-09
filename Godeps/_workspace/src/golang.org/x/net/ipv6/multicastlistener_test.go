@@ -11,12 +11,12 @@ import (
 	"runtime"
 	"testing"
 
+	"github.com/socketplane/socketplane/Godeps/_workspace/src/golang.org/x/net/ipv6" // see RFC 4727
 	"golang.org/x/net/internal/nettest"
-	"github.com/socketplane/socketplane/Godeps/_workspace/src/golang.org/x/net/ipv6"
 )
 
 var udpMultipleGroupListenerTests = []net.Addr{
-	&net.UDPAddr{IP: net.ParseIP("ff02::114")}, // see RFC 4727
+	&net.UDPAddr{IP: net.ParseIP("ff02::114")},
 	&net.UDPAddr{IP: net.ParseIP("ff02::1:114")},
 	&net.UDPAddr{IP: net.ParseIP("ff02::2:114")},
 }

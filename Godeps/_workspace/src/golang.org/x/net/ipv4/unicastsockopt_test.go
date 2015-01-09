@@ -11,8 +11,8 @@ import (
 	"testing"
 
 	"github.com/socketplane/socketplane/Godeps/_workspace/src/golang.org/x/net/internal/iana"
-	"golang.org/x/net/internal/nettest"
 	"github.com/socketplane/socketplane/Godeps/_workspace/src/golang.org/x/net/ipv4"
+	"golang.org/x/net/internal/nettest"
 )
 
 func TestConnUnicastSocketOptions(t *testing.T) {

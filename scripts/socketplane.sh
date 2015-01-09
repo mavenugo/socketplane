@@ -54,6 +54,9 @@ COMMANDS:
     attach <container_id>
             Attach to the <container_id>
 
+    cluster listen <interface>
+            Listen for cluster connections on the provided interface
+
     network list
             List all created networks
 
@@ -460,6 +463,21 @@ container_delete() {
     find -L /var/run/netns -type l -delete
 }
 
+cluster_bind() {
+    log_info "Requesting SocketPlane to listen on $1"
+    curl -s -X POST http://localhost:6675/v0.1/cluster/listen?iface=$1
+}
+
+cluster_join(){
+    log_info "Requesting SocketPlane to join the cluster at $1"
+    curl -s -X POST http://localhost:6675/v0.1/cluster/join?address=$1
+}
+
+cluster_leave(){
+    log_info "Requesting SocketPlane to leave cluster"
+    curl -s -X POST http://localhost:6675/v0.1/cluster/leave
+}
+
 network_list() {
     curl -s -X GET http://localhost:6675/v0.1/networks | python -m json.tool
 }
@@ -601,6 +619,26 @@ case "$1" in
     attach)
         shift
         docker attach $@
+        ;;
+    cluster)
+        shift
+        case $1 in
+            bind)
+                shift
+                cluster_bind $@
+                ;;
+	    join)
+		shift
+		cluster_join $@
+		;;
+            leave)
+	    	cluster_leave
+		;;
+	    *)
+                log_fatal "Unknown Command"
+                usage
+                exit 1
+        esac
         ;;
     network)
         shift
