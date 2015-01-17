@@ -10,6 +10,7 @@ import (
 
 	log "github.com/socketplane/socketplane/Godeps/_workspace/src/github.com/Sirupsen/logrus"
 	"github.com/socketplane/socketplane/Godeps/_workspace/src/github.com/codegangsta/cli"
+	"github.com/socketplane/socketplane/Godeps/_workspace/src/github.com/socketplane/ecc"
 	"github.com/socketplane/socketplane/Godeps/_workspace/src/github.com/vishvananda/netlink"
 	"github.com/socketplane/socketplane/datastore"
 )
@@ -69,7 +70,7 @@ func (d *Daemon) Run(ctx *cli.Context) {
 		} else {
 			log.Errorf("Unable to identify any Interface to Bind to. Going with Defaults")
 		}
-		datastore.Init(bindInterface, d.bootstrapNode)
+		datastore.Init(bindInterface, d.bootstrapNode, eccListener)
 		Bonjour(bindInterface)
 		if !d.bootstrapNode {
 			d.serialChan <- true
@@ -152,7 +153,7 @@ func ClusterRPCHandler(d *Daemon) {
 			}
 			log.Debugf("Setting new cluster listener to %s", bindInterface)
 			d.clusterListener = bindInterface
-			datastore.Init(d.clusterListener, d.bootstrapNode)
+			datastore.Init(d.clusterListener, d.bootstrapNode, eccListener)
 
 			if !d.bootstrapNode && once {
 				d.serialChan <- true
@@ -181,7 +182,7 @@ func ClusterRPCHandler(d *Daemon) {
 				log.Debugf("Setting new cluster listener to %s", bindInterface)
 				d.bootstrapNode = false
 				d.clusterListener = bindInterface
-				datastore.Init(d.clusterListener, d.bootstrapNode)
+				datastore.Init(d.clusterListener, d.bootstrapNode, eccListener)
 			}
 			if err = datastore.Join(joinAddress); err != nil {
 				log.Errorf("Could not join cluster %s. %s", joinAddress, err.Error())
@@ -226,4 +227,41 @@ func (d *Daemon) populateConnections() {
 			d.Connections[key] = connection
 		}
 	}
+}
+
+var eccListener eccWatch
+
+type eccWatch struct {
+}
+
+func isMyAddress(address string) bool {
+	intAddrs, err := net.InterfaceAddrs()
+	if err != nil {
+		return false
+	}
+	for _, a := range intAddrs {
+		if ipnet, ok := a.(*net.IPNet); ok && ipnet.IP.String() == address {
+			return true
+		}
+	}
+	return false
+}
+
+func (e eccWatch) NotifyNodeUpdate(nType ecc.NotifyUpdateType, nodeAddress string) {
+	if nType == ecc.NOTIFY_UPDATE_ADD {
+		log.Infof("New Node joined the cluster : %s", nodeAddress)
+		if !isMyAddress(nodeAddress) {
+			AddPeer(nodeAddress)
+		}
+	} else if nType == ecc.NOTIFY_UPDATE_DELETE {
+		log.Infof("Node left the cluster : %s", nodeAddress)
+		if !isMyAddress(nodeAddress) {
+			DeletePeer(nodeAddress)
+		}
+	}
+}
+
+func (e eccWatch) NotifyKeyUpdate(nType ecc.NotifyUpdateType, key string, data []byte) {
+}
+func (e eccWatch) NotifyStoreUpdate(nType ecc.NotifyUpdateType, store string, data map[string][]byte) {
 }
