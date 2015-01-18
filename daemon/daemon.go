@@ -67,6 +67,7 @@ func (d *Daemon) Run(ctx *cli.Context) {
 		}
 		if bindInterface != "" {
 			log.Printf("Binding to %s", bindInterface)
+			d.clusterListener = bindInterface
 		} else {
 			log.Errorf("Unable to identify any Interface to Bind to. Going with Defaults")
 		}
