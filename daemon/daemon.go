@@ -173,6 +173,7 @@ func ClusterRPCHandler(d *Daemon) {
 			if err != nil {
 				break
 			}
+			AddPeer(joinAddress)
 		case ClusterLeave:
 			if err := datastore.Leave(); err != nil {
 				log.Errorf("Error leaving cluster. %s", err.Error())
